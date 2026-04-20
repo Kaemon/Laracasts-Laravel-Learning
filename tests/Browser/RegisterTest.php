@@ -1,31 +1,31 @@
 <?php
 
 use Illuminate\Support\Facades\Auth;
+use Tests\TestCase;
 
 test('register a new user', function () {
-    /** @var \Tests\TestCase $this */
+    /** @var TestCase $this */
     visit('/register')
-        ->fill('name','Test User')
-        ->fill('email','test@example.com')
-        ->fill('password','Password123!')
+        ->fill('name', 'Test User')
+        ->fill('email', 'test@example.com')
+        ->fill('password', 'Password123!')
         ->press('@register-button')
-        ->assertPathIs('/'); 
-    $this->assertAuthenticated();   
+        ->assertPathIs('/');
+    $this->assertAuthenticated();
     expect(Auth::user())->toMatchArray([
-        'name'=>'Test User',
-        'email'=>'test@example.com',
+        'name' => 'Test User',
+        'email' => 'test@example.com',
     ]);
     $this->assertDatabaseHas('users', [
         'email' => 'test@example.com',
     ]);
 });
 
-it('requires a valid email', function(){
-    /** @var \Tests\TestCase $this */
+it('requires a valid email', function () {
     visit('/register')
-        ->fill('name','Test User')
-        ->fill('email','not-an-email')
-        ->fill('password','Password123!')
+        ->fill('name', 'Test User')
+        ->fill('email', 'not-an-email')
+        ->fill('password', 'Password123!')
         ->press('@register-button')
         ->assertPathIs('/register');
 });

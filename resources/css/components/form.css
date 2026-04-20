@@ -79,7 +79,7 @@ input[type=file]::file-selector-button {
     line-height: 1.25rem;
     font-weight: 500;
     background-color: var(--color-primary);
-    color: rgb(var(--color-background));
+    color: var(--color-background);
 }
 
 input[type=file]::file-selector-button:hover {

@@ -16,9 +16,9 @@ use Tests\TestCase;
 |
 */
 
-pest()->extend(Tests\TestCase::class)
-    ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
-    ->in('Browser','Unit');
+pest()->extend(TestCase::class)
+    ->use(RefreshDatabase::class)
+    ->in('Browser', 'Unit');
 
 /*
 |--------------------------------------------------------------------------

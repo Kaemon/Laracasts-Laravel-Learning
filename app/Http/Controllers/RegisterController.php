@@ -1,17 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rules\Password;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
 class RegisterController extends Controller
 {
-
     /**
      * Show the form for creating a new resource.
      */
@@ -27,7 +28,7 @@ class RegisterController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users','email')],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')],
             'password' => ['required', Password::default()],
         ]);
 
@@ -37,13 +38,14 @@ class RegisterController extends Controller
             'password' => Hash::make($request->password),
         ]);
         Auth::login($user);
+
         return redirect('/')->with('success', 'Registration successful!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id): void
     {
         //
     }
@@ -51,7 +53,7 @@ class RegisterController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id): void
     {
         //
     }
@@ -59,7 +61,7 @@ class RegisterController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id): void
     {
         //
     }
@@ -67,7 +69,7 @@ class RegisterController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id): void
     {
         //
     }
