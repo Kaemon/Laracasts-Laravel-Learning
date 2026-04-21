@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreIdeaRequest;
 use App\IdeaStatus;
 use App\Models\Idea;
 use Illuminate\Http\Request;
@@ -16,15 +17,11 @@ class IdeaController extends Controller
      */
     public function index(Request $request)
     {
-        $status = $request->status;
-        if (! in_array($status, IdeaStatus::values())) {
-            $status = null;
-        }
-
         return view('ideas/index', [
             'ideas' => Auth::user()
                 ->ideas()
-                ->when($status, fn ($query, $status) => $query->where('status', $status))
+                ->when(in_array($request->status, IdeaStatus::values()), fn ($query) => $query->where('status', $request->status))
+                ->latest()
                 ->get(),
             'statusCounts' => Idea::statusCounts(Auth::user()),
         ]);
@@ -41,15 +38,21 @@ class IdeaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): void
+    public function store(StoreIdeaRequest $request)
     {
-        //
+        Auth::user()->ideas()->create($request->validated());
+        return to_route('idea.index')->with('success','Idea created!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id) {}
+    public function show(Idea $idea)
+    {
+        return view('ideas/show', [
+            'idea' => $idea,
+        ]);
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -70,8 +73,10 @@ class IdeaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id): void
+    public function destroy(Idea $idea)
     {
-        //
+        $idea->delete();
+
+        return to_route('idea.index');
     }
 }
